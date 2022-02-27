@@ -37,7 +37,7 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHendler);
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect('mongodb://localhost:27017/moviesdb', {
 });
 
 app.listen(PORT);
