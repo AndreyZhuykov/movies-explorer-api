@@ -17,9 +17,15 @@ const userValidation = celebrate({
   }),
 });
 
+const userDataValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+  }),
+});
+
 const movieValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(60).required(),
+    country: Joi.string().min(2).max(60).required(),
     director: Joi.string().min(2).max(99).required(),
     duration: Joi.number().min(2).max(30).required(),
     year: Joi.string().min(4).max(10).required(),
@@ -38,24 +44,10 @@ const movieIdValidation = celebrate({
   }),
 });
 
-const userIdValidation = celebrate({
-  params: Joi.object().keys({
-    userId: Joi.string().required().hex().length(24),
-  }),
-});
-
-const userDataValidation = celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
-    about: Joi.string().min(2).max(30).required(),
-  }),
-});
-
 module.exports = {
   loginValidation,
   userValidation,
   userDataValidation,
-  userIdValidation,
   movieValidation,
   movieIdValidation,
 };

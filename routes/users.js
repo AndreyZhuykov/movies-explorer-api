@@ -3,8 +3,9 @@ const {
   editUser,
   getUserId,
 } = require('../controllers/users');
+const { userDataValidation } = require('../middlewares/validation');
 
 router.get('/users/me', getUserId);
-router.post('/users/me', editUser);
+router.patch('/users/me', userDataValidation, editUser);
 
 module.exports = router;

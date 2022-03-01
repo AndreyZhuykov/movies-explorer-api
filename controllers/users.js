@@ -4,18 +4,11 @@ const User = require('../models/user');
 const ValidationError = require('../errors/ValidationError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const { JWT_SECRET, NODE_ENV } = process.env;
 
-module.exports.getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => res.send({ data: users }))
-    .catch(next);
-};
-
 module.exports.getUserId = (req, res, next) => {
-  User.findById(req.params.userId)
+  User.findById(req.user._id)
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
@@ -61,14 +54,16 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.editUser = (req, res, next) => {
   const { name } = req.body;
-  const { password } = req.body;
+  const { email } = req.body;
 
-  User.findByIdAndUpdate(req.user._id, { name, password }, { new: true, runValidator: true })
+  User.findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidator: true })
     .orFail(() => new NotFoundError('Пользователь с указанным _id не найден'))
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные при обновлении аватара'));
+      } else if (err.code === 11000) {
+        next(new ConflictError('Пользователь с таким email уже существует'));
       } else if (err.message === 'NotFound') {
         next(new NotFoundError('Пользователь с указанным _id не найден'));
       } else {
@@ -85,18 +80,5 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, `${NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key'}`, { expiresIn: '7d' });
       res.send({ token });
     })
-    .catch((err) => {
-      if (err.name === 401) {
-        next(new UnauthorizedError('Неавторизованный пользователь'));
-      } else {
-        next(err);
-      }
-    });
-};
-
-module.exports.getCurrentUser = (req, res, next) => {
-  User.findById(req.user._id)
-    .orFail(() => new NotFoundError('Пользователь не найден'))
-    .then((user) => res.send({ data: user }))
     .catch(next);
 };

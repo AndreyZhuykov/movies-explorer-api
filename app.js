@@ -25,8 +25,9 @@ app.get('/crash-test', () => {
 app.use(requestLogger);
 app.post('/signin', loginValidation, login);
 app.post('/signup', userValidation, createUser);
-
 app.use(auth);
+app.use('/users', require('./routes/users'));
+app.use('/movies', require('./routes/movies'));
 
 app.use(routes);
 

@@ -33,7 +33,7 @@ module.exports.createMovie = (req, res, next) => {
     nameEN,
     owner: req.user._id,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные при создании фильма'));
@@ -44,21 +44,17 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-  const { movieId } = req.params;
-
-  Movie.findById(req.params.movieId)
+  Movie.findById(req.params.movies._id)
     .orFail(() => new NotFoundError('Фильм с указанным _id не найден'))
     .then((movie) => {
       if (movie.owner.toString() !== req.user._id) {
         return next(new ForbiddenError('Вы пытаетесь удалить чужой фильм'));
-      } return Movie.findByIdAndRemove(movieId)
-        .then(() => res.status(200).send(movie));
+      } return Movie.findByIdAndRemove(req.params.movies._id)
+        .then(() => res.send(movie));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new ValidationError('Невалидный id'));
-      } else if (err.message === 'NotFound') {
-        next(new NotFoundError('Фильм с указанным _id не найден'));
       } else {
         next(err);
       }
