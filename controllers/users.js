@@ -64,8 +64,6 @@ module.exports.editUser = (req, res, next) => {
         next(new ValidationError('Переданы некорректные данные при обновлении аватара'));
       } else if (err.code === 11000) {
         next(new ConflictError('Пользователь с таким email уже существует'));
-      } else if (err.message === 'NotFound') {
-        next(new NotFoundError('Пользователь с указанным _id не найден'));
       } else {
         next(err);
       }
