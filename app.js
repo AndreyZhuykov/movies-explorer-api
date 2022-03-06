@@ -3,17 +3,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
-const routes = require('./routes');
+const routes = require('./routes/index');
 const errorHendler = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { login, createUser } = require('./controllers/users');
-const auth = require('./middlewares/auth');
+const DB_ADDRES = require('./utils/config');
 const NotFoundError = require('./errors/NotFoundError');
-const { loginValidation, userValidation } = require('./middlewares/validation');
-
-const { PORT = 3000 } = process.env;
 
 const app = express();
+
+const { PORT = 3000, MONGO_URL, NODE_ENV } = process.env;
+
 app.use(bodyParser.json());
 
 app.get('/crash-test', () => {
@@ -23,11 +22,6 @@ app.get('/crash-test', () => {
 });
 
 app.use(requestLogger);
-app.post('/signin', loginValidation, login);
-app.post('/signup', userValidation, createUser);
-app.use(auth);
-app.use('/users', require('./routes/users'));
-app.use('/movies', require('./routes/movies'));
 
 app.use(routes);
 
@@ -38,7 +32,7 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHendler);
 
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : DB_ADDRES, () => {
 });
 
 app.listen(PORT);

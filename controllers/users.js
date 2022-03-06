@@ -10,7 +10,7 @@ const { JWT_SECRET, NODE_ENV } = process.env;
 module.exports.getUserId = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => new NotFoundError('Пользователь не найден'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new ValidationError('Невалидный id'));
@@ -35,12 +35,7 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then(() => res.send({
-      data: {
-        name,
-        email,
-      },
-    }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new ValidationError('Переданы некорректные данные при создании пользователя'));

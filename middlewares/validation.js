@@ -20,6 +20,7 @@ const userValidation = celebrate({
 const userDataValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
+    email: Joi.string().email().required(),
   }),
 });
 
@@ -33,6 +34,7 @@ const movieValidation = celebrate({
     image: Joi.string().required().pattern(linkRegularExpression),
     trailerLink: Joi.string().required().pattern(linkRegularExpression),
     thumbnail: Joi.string().required().pattern(linkRegularExpression),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().min(2).required(),
     nameEN: Joi.string().min(2).required(),
   }),
