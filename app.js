@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
@@ -21,6 +22,7 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+app.use(helmet);
 app.use(requestLogger);
 
 app.use(routes);

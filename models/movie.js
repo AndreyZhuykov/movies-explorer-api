@@ -17,8 +17,6 @@ const movieSchema = new mongoose.Schema({
   duration: {
     type: Number,
     required: true,
-    minlength: 2,
-    maxlength: 30,
   },
   year: {
     type: String,

@@ -28,7 +28,7 @@ const movieValidation = celebrate({
   body: Joi.object().keys({
     country: Joi.string().min(2).max(60).required(),
     director: Joi.string().min(2).max(99).required(),
-    duration: Joi.number().min(2).max(30).required(),
+    duration: Joi.number().required(),
     year: Joi.string().min(4).max(10).required(),
     description: Joi.string().min(2).required(),
     image: Joi.string().required().pattern(linkRegularExpression),
