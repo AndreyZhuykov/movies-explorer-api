@@ -58,11 +58,11 @@ const movieSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
-  movieId: [{
+  movieId: {
     type: Number,
-    ref: 'user',
-    default: [],
-  }],
+    required: true,
+    unique: true,
+  },
   nameRU: {
     type: String,
     required: true,

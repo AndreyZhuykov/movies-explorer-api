@@ -7,8 +7,8 @@ const { errors } = require('celebrate');
 const routes = require('./routes/index');
 const errorHendler = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const limiter = require('./utils/rateLimit');
 const DB_ADDRES = require('./utils/config');
-const NotFoundError = require('./errors/NotFoundError');
 
 const app = express();
 
@@ -22,14 +22,12 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.use(helmet);
 app.use(requestLogger);
+app.use(helmet());
+app.use(limiter);
 
 app.use(routes);
 
-app.use((req, res, next) => {
-  next(new NotFoundError('Страницы не сушествует'));
-});
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHendler);
