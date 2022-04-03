@@ -9,12 +9,14 @@ const errorHendler = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./utils/rateLimit');
 const DB_ADDRES = require('./utils/config');
+const cors = require('./middlewares/cors');
 
 const app = express();
 
 const { PORT = 3000, MONGO_URL, NODE_ENV } = process.env;
 
 app.use(bodyParser.json());
+app.use(cors);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
