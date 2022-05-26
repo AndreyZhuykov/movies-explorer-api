@@ -15,6 +15,9 @@ const app = express();
 
 const { PORT = 3000, MONGO_URL, NODE_ENV } = process.env;
 
+mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : DB_ADDRES, () => {
+});
+
 app.use(bodyParser.json());
 app.use(cors);
 
@@ -33,8 +36,5 @@ app.use(routes);
 app.use(errorLogger);
 app.use(errors());
 app.use(errorHendler);
-
-mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : DB_ADDRES, () => {
-});
 
 app.listen(PORT);
