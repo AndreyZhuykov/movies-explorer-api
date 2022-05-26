@@ -6,13 +6,13 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 60,
+    maxlength: 1000,
   },
   director: {
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 99,
+    maxlength: 1000,
   },
   duration: {
     type: Number,
