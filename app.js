@@ -9,7 +9,6 @@ const errorHendler = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./utils/rateLimit');
 const DB_ADDRES = require('./utils/config');
-const cors = require('./middlewares/cors');
 
 const app = express();
 
@@ -18,7 +17,6 @@ const { PORT = 3000, MONGO_URL, NODE_ENV } = process.env;
 mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : DB_ADDRES, () => {
 });
 
-app.use(cors);
 app.use(bodyParser.json());
 
 app.get('/crash-test', () => {
