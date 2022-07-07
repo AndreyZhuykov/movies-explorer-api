@@ -18,8 +18,8 @@ const { PORT = 3000, MONGO_URL, NODE_ENV } = process.env;
 mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : DB_ADDRES, () => {
 });
 
-app.use(bodyParser.json());
 app.use(cors);
+app.use(bodyParser.json());
 
 app.get('/crash-test', () => {
   setTimeout(() => {
