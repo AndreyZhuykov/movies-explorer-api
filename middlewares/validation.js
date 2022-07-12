@@ -36,6 +36,7 @@ const movieValidation = celebrate({
     thumbnail: Joi.string().required().pattern(linkRegularExpression),
     movieId: Joi.number().integer().required(),
     nameEN: Joi.string().min(2).required(),
+    nameRU: Joi.string().min(2).required(),
   }),
 });
 
